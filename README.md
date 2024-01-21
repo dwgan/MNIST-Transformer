@@ -171,47 +171,61 @@ for epoch in range(1, epochs + 1):
 
 断点来到前向传播函数
 
-![image-20240115233248483](https://raw.githubusercontent.com/dwgan/PicGo/main/img/202401152332562.png)
+![image-20240120121105152](https://gitee.com/dwgan/PicGo/raw/main/img/202401201211387.png)
 
 在命令行中输入如下代码可以将变量进行可视化
 
 ```python
 import matplotlib.pyplot as plt
-for i in range(20):
-    for j in range(1):
-        plt.subplot(4, 5, i*1+j+1)
-        img = x[i, j, :, :]
-        img = img.cpu().detach().numpy()
-        plt.imshow(img)
+for i in range(4):
+    for j in range(5):
+        plt.subplot(4, 5, i*5+j+1)
+        xxx = img[i*1+j, 0, :, :]
+        xxx = xxx.cpu().detach().numpy()
+        plt.imshow(xxx)
         plt.axis('off')
 plt.show()
 ```
 
-可以看到，这里地x是$512\times1\times28\times28$的tensor，取其前20个输出观察，它们是20个手写数字地图像
+可以看到，这里地img是$64\times1\times28\times28$的tensor，取其前20个输出观察，它们是20个手写数字地图像
 
-![image-20240115224848103](https://raw.githubusercontent.com/dwgan/PicGo/main/img/202401152248185.png)
+![image-20240120121430942](https://gitee.com/dwgan/PicGo/raw/main/img/202401201214006.png)
 
-代码执行到下一行，继续将out可视化，可以看到卷积层1输入通道是1输出是10，它的物理含义是将一幅图像进行了10次特征提取，由于这十个CNN特征模板是随机生成的，因此提取方式也很随机
+```python
+import matplotlib.pyplot as plt
+for i in range(16):
+    for j in range(16):
+        plt.subplot(16, 16, i*16+j+1)
+        xxx = x[i, j, :].reshape(7, 7)
+        xxx = xxx.cpu().detach().numpy()
+        plt.imshow(xxx)
+        plt.axis('off')
+plt.show()
+```
 
-<img src="https://raw.githubusercontent.com/dwgan/PicGo/main/img/202401152257725.png" alt="image-20240115225715658" style="zoom:200%;" />
+![image-20240120122524850](https://gitee.com/dwgan/PicGo/raw/main/img/202401201225889.png)
 
-继续下一行，经过激活函数，可以看到图像特征变得明显了
+```python
+import matplotlib.pyplot as plt
+for i in range(4):
+    for j in range(4):
+        plt.subplot(4, 4, i*4+j+1)
+        xxx = x[0, i*4+j, :].reshape(7, 7)
+        xxx = xxx.cpu().detach().numpy()
+        plt.imshow(xxx)
+        plt.axis('off')
+plt.show()
+```
 
-<img src="https://raw.githubusercontent.com/dwgan/PicGo/main/img/202401152258436.png" alt="image-20240115225829396" style="zoom:200%;" />
+![](https://gitee.com/dwgan/PicGo/raw/main/img/202401201226347.png)
 
-下一行，对图像进行池化，更加抽象了
+![](https://gitee.com/dwgan/PicGo/raw/main/img/202401201228916.png)
 
-<img src="https://raw.githubusercontent.com/dwgan/PicGo/main/img/202401152259690.png" alt="image-20240115225900647" style="zoom:200%;" />
+![image-20240120123357287](https://gitee.com/dwgan/PicGo/raw/main/img/202401201233333.png)
 
-下一行，经过第二次卷积之后人眼已经很难分辨出来单个图像的特征了，不过通道数变多了，对于计算机而言理论上是有更多特征的
+![image-20240120123431878](https://gitee.com/dwgan/PicGo/raw/main/img/202401201234920.png)
 
-<img src="https://raw.githubusercontent.com/dwgan/PicGo/main/img/202401152300279.png" alt="image-20240115230019086" style="zoom:200%;" />
-
-往下一行，激活之后会使得信号更加稀疏，不过人眼已经很难提取特征了
-
-<img src="https://raw.githubusercontent.com/dwgan/PicGo/main/img/202401152300256.png" alt="image-20240115230053225" style="zoom:200%;" />
-
-后面是将图像经过全连接层展开，最后变成10个类别，10个数字的大小表示和对应数字的相似度
+![image-20240120123559786](https://gitee.com/dwgan/PicGo/raw/main/img/202401201235828.png)
 
 ![image-20240115230327578](https://raw.githubusercontent.com/dwgan/PicGo/main/img/202401152303622.png)
 
@@ -227,8 +241,11 @@ plt.show()
 
 ### 工程源码
 
-https://github.com/dwgan/MNIST-PyTorch
+https://github.com/dwgan/MNIST-Transformer
 
 ### 参考文献
 
-https://blog.csdn.net/sikh_0529/article/details/126901302
+[使用Pytorch手写ViT — VisionTransformer](https://blog.csdn.net/deephub/article/details/126460577)
+
+[真香！Vision Transformer 快速实现 Mnist 识别](https://blog.csdn.net/dQCFKyQDXYm3F8rB0/article/details/123700055)
+
